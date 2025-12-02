@@ -1,6 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
   const tiles = [
     {
       title: "Nossa História",
@@ -29,9 +32,9 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f1115] text-white">
+    <div className="min-h-screen bg-[#0f1115] text-white mx-auto px-4 pb-16">
       <main>
-        <section className="max-w-screen-xl mx-auto px-4 py-8">
+        <section className="max-w-screen-xl mx-auto py-8">
           <div className="relative rounded-2xl overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1569759276108-31b8e7e43e7b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
@@ -43,32 +46,32 @@ export default function HomePage() {
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                 Bem-vindo à Casa Church Global
               </h1>
-              <p className="mt-3 text-white/80 text-sm sm:text-base">
+              <p className="my-3 text-white/80 text-sm sm:text-base">
                 Você é bem-vindo aqui.
               </p>
-              <Link
-                to="/sobre"
-                className="mt-6 inline-flex items-center px-5 py-3 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors text-sm font-semibold"
+              <Button
+                onClick={() => {
+                  navigate("/sobre");
+                }}
+                style={2}
+                size="lg"
               >
                 Junte-se a nós
-              </Link>
+              </Button>
             </div>
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto px-4">
+        <section className="max-w-screen-xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="rounded-xl bg-white/5 border border-white/10 p-6">
               <p className="text-white/80 text-sm">Próximo evento</p>
-              <h3 className="mt-2 text-lg font-semibold">
+              <h3 className="mt-2 mb-3 text-lg font-semibold">
                 Descubra o que está acontecendo
               </h3>
-              <Link
-                to="/eventos"
-                className="mt-6 inline-flex items-center px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors text-sm font-medium"
-              >
+              <Button onClick={() => navigate("/eventos")} style={2}>
                 Ver detalhes
-              </Link>
+              </Button>
             </div>
 
             <div className="md:col-span-2 rounded-xl overflow-hidden border border-white/10">
@@ -81,7 +84,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto px-4 mt-8">
+        <section className="max-w-screen-xl mx-auto mt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiles.map((t) => (
               <Link
@@ -93,7 +96,7 @@ export default function HomePage() {
                   <img
                     src={t.image}
                     alt={t.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hover:scale-110 duration-200"
                   />
                 </div>
                 <div className="p-3">
@@ -106,7 +109,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto px-4 mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="max-w-screen-xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h4 className="text-base font-semibold">Dias de Culto</h4>
             <ul className="mt-3 space-y-2 text-white/80">

@@ -1,11 +1,26 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+// components
+import Button from "./Button";
+import Avatar from "./Avatar";
+
+// assets
+import LogoName from "../assets/logo-name.png";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
-    <header className="border-b border-white/10 bg-[#0f1115] text-white">
+    <header className="min-h-16 border-b border-white/10 bg-[#0f1115] text-white">
       <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold tracking-wide">
-          CAS&gt;
+          <img
+            src={LogoName}
+            alt="Logo Casa Church"
+            width={120}
+            draggable={false}
+            className="select-none"
+          />
         </Link>
         <nav className="hidden md:flex gap-6 text-sm">
           <Link to="/" className="text-white/80 hover:text-white">
@@ -28,13 +43,8 @@ export default function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            to="/login"
-            className="px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 transition-colors text-sm font-medium"
-          >
-            Entrar
-          </Link>
-          <div className="w-8 h-8 rounded-full border border-white/20 bg-white/5" />
+          <Button onClick={() => navigate("/login")}>Entrar</Button>
+          <Avatar name="Diego Borda Castro" size="sm" />
         </div>
       </div>
     </header>
