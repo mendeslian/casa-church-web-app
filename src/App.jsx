@@ -1,20 +1,22 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import HomePage from "./containers/HomePage.jsx";
-// import Dashboard from "../pages/Dashboard.jsx";
-// import Login from "../pages/Login.jsx";
-// import NotFound from "../pages/NotFound.jsx";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<HomePage />} />
+      </Route>
+
       <Route
-        path="/dashboard"
-        element={<ProtectedRoute>{/* <Dashboard /> */}</ProtectedRoute>}
+        path="/login"
+        element={<div className="p-6 text-white">Login</div>}
       />
-      {/* <Route path="/login" element={<Login />} />
-      <Route path="*" element={<NotFound />} /> */}
+      <Route
+        path="*"
+        element={<div className="p-6 text-white">Página não encontrada</div>}
+      />
     </Routes>
   );
 }
