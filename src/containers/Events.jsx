@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import Button from "../components/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function Events() {
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const navigate = useNavigate();
 
   const churchImages = [
     "photo-1582731321099-ba22b05607c4",
@@ -102,7 +104,10 @@ export default function Events() {
                       {event.time}
                     </p>
                   </div>
-                  <Button onClick={() => setSelectedEvent(event)} size="sm">
+                  <Button
+                    onClick={() => navigate(`/evento/${event.id}`)}
+                    size="sm"
+                  >
                     Ver detalhes
                   </Button>
                 </div>
@@ -111,75 +116,6 @@ export default function Events() {
           </div>
         </section>
       </main>
-
-      {selectedEvent && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-[#1a1f2e] rounded-2xl border border-white/10 max-w-md w-full max-h-[80vh] overflow-y-auto">
-            {/* Header do Modal */}
-            <div
-              className="h-56 relative bg-cover bg-center"
-              style={{
-                backgroundImage: `url('${getImageUrl(selectedEvent.id)}')`,
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30" />
-              <button
-                onClick={() => setSelectedEvent(null)}
-                className="absolute top-4 right-4 p-2 rounded-full bg-black/40 hover:bg-black/60 transition-colors"
-              >
-                <X size={24} />
-              </button>
-            </div>
-
-            {/* Conteúdo do Modal */}
-            <div className="p-6">
-              <h2 className="text-2xl font-bold mb-2">{selectedEvent.title}</h2>
-              <p className="text-white/60 text-sm mb-6">
-                {selectedEvent.description}
-              </p>
-
-              <div className="space-y-4 mb-6">
-                <div className="rounded-lg bg-white/5 border border-white/10 p-4">
-                  <p className="text-white/60 text-xs uppercase tracking-wide mb-1">
-                    Dia
-                  </p>
-                  <p className="text-white font-medium">{selectedEvent.day}</p>
-                </div>
-                <div className="rounded-lg bg-white/5 border border-white/10 p-4">
-                  <p className="text-white/60 text-xs uppercase tracking-wide mb-1">
-                    Horário
-                  </p>
-                  <p className="text-white font-medium">{selectedEvent.time}</p>
-                </div>
-              </div>
-
-              <div className="mb-6">
-                <h3 className="text-sm font-semibold mb-3 uppercase tracking-wide text-white/80">
-                  Descrição
-                </h3>
-                <p className="text-white/70 leading-relaxed text-sm">
-                  {selectedEvent.fullDescription}
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <button
-                  onClick={() => setSelectedEvent(null)}
-                  className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium"
-                >
-                  Inscrever-se
-                </button>
-                <button
-                  onClick={() => setSelectedEvent(null)}
-                  className="w-full py-3 px-4 rounded-lg border border-white/20 hover:bg-white/5 transition-all duration-200 font-medium"
-                >
-                  Fechar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
