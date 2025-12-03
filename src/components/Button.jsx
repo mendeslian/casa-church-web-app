@@ -11,6 +11,7 @@ export default function Button({
   iconPosition = "left",
   iconSize = 18,
   iconStrokeWidth = 2,
+  fullWidth = false,
 }) {
   const baseStyles =
     "font-medium transition-all duration-300 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2";
@@ -32,6 +33,8 @@ export default function Button({
     md: "p-2",
     lg: "p-3",
   };
+
+  const widthClass = fullWidth ? "w-full" : "";
 
   const variantClass = variants[style] || variants.primary;
   const sizeClass = children ? sizes[size] || sizes.md : iconOnlySizes[size];
@@ -77,7 +80,7 @@ export default function Button({
 
   return (
     <button
-      className={`${baseStyles} ${variantClass} ${sizeClass} ${className}`}
+      className={`${baseStyles} ${variantClass} ${sizeClass} ${widthClass} ${className}`}
       onClick={onClick}
       disabled={disabled}
       title={!children && icon ? `${icon} button` : ""}

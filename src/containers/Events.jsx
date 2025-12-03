@@ -1,10 +1,7 @@
-import { useState } from "react";
-import { X } from "lucide-react";
-import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import Button from "../components/Button";
 
 export default function Events() {
-  const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
 
   const churchImages = [
