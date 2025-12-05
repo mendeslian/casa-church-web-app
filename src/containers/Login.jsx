@@ -1,6 +1,7 @@
+import axios from "axios";
 import { Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toastError } from "../utils/toast";
+import { toastSuccess, toastError } from "../utils/toast";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -34,9 +35,16 @@ export default function Login() {
 
   const onSubmit = async (formValues) => {
     try {
-      const { data } = await login(formValues);
-      console.log(data);
-      return data;
+      const res = await login(formValues);
+      toastSuccess(res?.message || "Login realizado com sucesso");
+      console.log(res);
+      localStorage.setItem("user", JSON.stringify({ token: res?.token }));
+      // eslint-disable-next-line react-hooks/immutability
+      axios.defaults.headers.common["Authorization"] = res?.token
+        ? res.token
+        : "";
+      navigate("/");
+      return res;
     } catch (error) {
       const apiMessage =
         error?.response?.data?.message ||

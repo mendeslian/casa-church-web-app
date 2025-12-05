@@ -15,7 +15,9 @@ const baseOptions = {
 };
 
 const buildContent = (message) =>
-  React.createElement("div", { className: "space-y-1" }, [
+  React.createElement(
+    "div",
+    { className: "space-y-1" },
     React.createElement(
       "div",
       { className: "font-semibold text-white text-[10px] uppercase" },
@@ -25,8 +27,8 @@ const buildContent = (message) =>
       "div",
       { className: "text-white/80 text-[14px]" },
       message
-    ),
-  ]);
+    )
+  );
 
 export const toastError = (message, options) =>
   toast.error(buildContent(message), { ...baseOptions, ...options });

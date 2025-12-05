@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import PublicRoute from "./components/PublicRoute.jsx";
 import Home from "./containers/Home.jsx";
 import Events from "./containers/Events.jsx";
 import Event from "./containers/Event.jsx";
@@ -17,8 +18,10 @@ export default function App() {
           <Route path="/evento/:id" element={<Event />} />
         </Route>
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/registrar" element={<Register />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/registrar" element={<Register />} />
+        </Route>
         <Route
           path="*"
           element={<div className="p-6 text-white">Página não encontrada</div>}

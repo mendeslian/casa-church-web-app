@@ -9,6 +9,9 @@ import { toastError, toastSuccess } from "../utils/toast";
 import Input from "../components/Input";
 import Button from "../components/Button";
 
+// services
+import { create } from "../services/users/usersService";
+
 // assets
 import Logo from "../assets/logo.png";
 
@@ -30,6 +33,7 @@ export default function Register() {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
@@ -39,8 +43,18 @@ export default function Register() {
 
   const onSubmit = async (values) => {
     try {
-      console.log("Registro:", values);
-      toastSuccess("Conta criada com sucesso");
+      const createUserData = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+        role: "user",
+      };
+
+      const { data } = await create(createUserData);
+      toastSuccess(data?.message || "Conta criada com sucesso");
+      reset();
+
+      return data;
     } catch (error) {
       const apiMessage =
         error?.response?.data?.message ||
@@ -48,7 +62,7 @@ export default function Register() {
           ? error.response.data
           : null) ||
         error?.message ||
-        "Erro ao registrar. Tente novamente.";
+        "Erro ao cadastrar usuário. Tente novamente.";
       toastError(apiMessage);
     }
   };
