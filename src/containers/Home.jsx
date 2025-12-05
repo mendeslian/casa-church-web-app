@@ -34,14 +34,14 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#0f1115] text-white mx-auto px-4 pb-16">
       <main>
-        <section className="max-w-screen-xl mx-auto py-8">
+        <section className="max-w-7xl mx-auto py-8">
           <div className="relative rounded-2xl overflow-hidden">
             <img
               src="https://images.unsplash.com/photo-1569759276108-31b8e7e43e7b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Interior de igreja"
               className="w-full h-[360px] sm:h-[420px] lg:h-[520px] object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
             <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-12">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                 Bem-vindo à Casa Church Global
@@ -62,7 +62,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto">
+        <section className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="rounded-xl bg-white/5 border border-white/10 p-6">
               <p className="text-white/80 text-sm">Próximo evento</p>
@@ -84,7 +84,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto mt-8">
+        <section className="max-w-7xl mx-auto mt-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {tiles.map((t) => (
               <Link
@@ -109,7 +109,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <section className="max-w-7xl mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <h4 className="text-base font-semibold">Dias de Culto</h4>
             <ul className="mt-3 space-y-2 text-white/80">

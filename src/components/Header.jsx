@@ -12,7 +12,7 @@ export default function Header() {
   const navigate = useNavigate();
   return (
     <header className="min-h-16 border-b border-white/10 bg-[#0f1115] text-white">
-      <div className="max-w-screen-xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link to="/" className="text-2xl font-bold tracking-wide">
           <img
             src={LogoName}
