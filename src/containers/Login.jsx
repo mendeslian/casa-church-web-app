@@ -1,61 +1,52 @@
-import { useState } from "react";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toastError } from "../utils/toast";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // components
-import InputField from "../components/InputField";
-import PasswordInput from "../components/PasswordInput";
+import Input from "../components/Input";
 import Button from "../components/Button";
+
+import { login } from "../services/auth/authService";
 
 // assets
 import Logo from "../assets/logo.png";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+
+  const schema = z.object({
+    email: z.string().email("Email inválido"),
+    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
   });
-  const [errors, setErrors] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { email: "", password: "" },
+    mode: "onChange",
+  });
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email é obrigatório";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email inválido";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Senha é obrigatória";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Senha deve ter no mínimo 6 caracteres";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Login:", formData);
+  const onSubmit = async (formValues) => {
+    try {
+      const { data } = await login(formValues);
+      console.log(data);
+      return data;
+    } catch (error) {
+      const apiMessage =
+        error?.response?.data?.message ||
+        (typeof error?.response?.data === "string"
+          ? error.response.data
+          : null) ||
+        error?.message ||
+        "Erro ao realizar login. Tente novamente.";
+      toastError(apiMessage);
+      console.log(error);
     }
   };
 
@@ -75,31 +66,50 @@ export default function Login() {
             <p className="text-white/60 text-sm">Faça login para continuar</p>
           </div>
           <div>
-            <InputField
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="seu@email.com"
-              icon={Mail}
-              value={formData.email}
-              onChange={handleInputChange}
-              error={errors.email}
-            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Email"
+                    name={field.name}
+                    type="email"
+                    placeholder="seu@email.com"
+                    icon={Mail}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.email?.message}
+                  />
+                )}
+              />
 
-            <PasswordInput
-              label="Senha"
-              name="password"
-              value={formData.password}
-              showPassword={showPassword}
-              onToggle={() => setShowPassword(!showPassword)}
-              onChange={handleInputChange}
-              placeholder="Mínimo 6 caracteres"
-              error={errors.password}
-            />
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Senha"
+                    name={field.name}
+                    type="password"
+                    placeholder="Mínimo 6 caracteres"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.password?.message}
+                  />
+                )}
+              />
 
-            <Button onClick={handleSubmit} fullWidth style={1} size="lg">
-              Entrar
-            </Button>
+              <Button
+                type="submit"
+                fullWidth
+                style={1}
+                size="lg"
+                disabled={isSubmitting}
+              >
+                Entrar
+              </Button>
+            </form>
 
             <div className="text-center text-white/70 text-sm mt-4">
               Não tem uma conta?{" "}

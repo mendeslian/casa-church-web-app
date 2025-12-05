@@ -1,10 +1,12 @@
-import { useState } from "react";
 import { Mail, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toastError, toastSuccess } from "../utils/toast";
 
 // components
-import InputField from "../components/InputField";
-import PasswordInput from "../components/PasswordInput";
+import Input from "../components/Input";
 import Button from "../components/Button";
 
 // assets
@@ -12,54 +14,42 @@ import Logo from "../assets/logo.png";
 
 export default function Register() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+
+  const schema = z
+    .object({
+      name: z.string().min(1, "Nome é obrigatório"),
+      email: z.string().email("Email inválido"),
+      password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+      confirmPassword: z.string().min(1, "Confirme sua senha"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ["confirmPassword"],
+      message: "As senhas não coincidem",
+    });
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: { name: "", email: "", password: "", confirmPassword: "" },
+    mode: "onChange",
   });
-  const [errors, setErrors] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.name) newErrors.name = "Nome é obrigatório";
-
-    if (!formData.email) {
-      newErrors.email = "Email é obrigatório";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Email inválido";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Senha é obrigatória";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Senha deve ter no mínimo 6 caracteres";
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Confirme sua senha";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "As senhas não coincidem";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      console.log("Registro:", formData);
-      // Chamada à API de registro aqui
+  const onSubmit = async (values) => {
+    try {
+      console.log("Registro:", values);
+      toastSuccess("Conta criada com sucesso");
+    } catch (error) {
+      const apiMessage =
+        error?.response?.data?.message ||
+        (typeof error?.response?.data === "string"
+          ? error.response.data
+          : null) ||
+        error?.message ||
+        "Erro ao registrar. Tente novamente.";
+      toastError(apiMessage);
     }
   };
 
@@ -79,52 +69,82 @@ export default function Register() {
             <p className="text-white/60 text-sm">Junte-se à nossa comunidade</p>
           </div>
           <div>
-            <InputField
-              label="Nome Completo"
-              name="name"
-              placeholder="Seu nome completo"
-              icon={User}
-              value={formData.name}
-              onChange={handleInputChange}
-              error={errors.name}
-            />
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Nome Completo"
+                    name={field.name}
+                    placeholder="Seu nome completo"
+                    icon={User}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.name?.message}
+                  />
+                )}
+              />
 
-            <InputField
-              label="Email"
-              name="email"
-              type="email"
-              placeholder="seu@email.com"
-              icon={Mail}
-              value={formData.email}
-              onChange={handleInputChange}
-              error={errors.email}
-            />
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Email"
+                    name={field.name}
+                    type="email"
+                    placeholder="seu@email.com"
+                    icon={Mail}
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.email?.message}
+                  />
+                )}
+              />
 
-            <PasswordInput
-              label="Senha"
-              name="password"
-              value={formData.password}
-              showPassword={showPassword}
-              onToggle={() => setShowPassword(!showPassword)}
-              onChange={handleInputChange}
-              placeholder="Mínimo 6 caracteres"
-              error={errors.password}
-            />
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Senha"
+                    name={field.name}
+                    type="password"
+                    placeholder="Mínimo 6 caracteres"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.password?.message}
+                  />
+                )}
+              />
 
-            <PasswordInput
-              label="Confirmar Senha"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              showPassword={showConfirmPassword}
-              onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
-              onChange={handleInputChange}
-              placeholder="Confirme sua senha"
-              error={errors.confirmPassword}
-            />
+              <Controller
+                name="confirmPassword"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    label="Confirmar Senha"
+                    name={field.name}
+                    type="password"
+                    placeholder="Confirme sua senha"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={errors.confirmPassword?.message}
+                  />
+                )}
+              />
 
-            <Button onClick={handleSubmit} fullWidth style={1} size="lg">
-              Cadastrar
-            </Button>
+              <Button
+                type="submit"
+                fullWidth
+                style={1}
+                size="lg"
+                disabled={isSubmitting}
+              >
+                Cadastrar
+              </Button>
+            </form>
 
             <div className="text-center text-white/70 text-sm mt-4">
               Já tem uma conta?{" "}
