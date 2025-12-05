@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 // components
 import Button from "./Button";
@@ -9,7 +9,7 @@ import Avatar from "./Avatar";
 import LogoName from "../assets/logo-name.png";
 
 export default function Header() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <header className="min-h-16 border-b border-white/10 bg-[#0f1115] text-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -43,7 +43,7 @@ export default function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
-          <Button onClick={() => navigate("/login")}>Entrar</Button>
+          {/* <Button onClick={() => navigate("/login")}>Entrar</Button> */}
           <Avatar name="Diego Borda Castro" size="sm" />
         </div>
       </div>
