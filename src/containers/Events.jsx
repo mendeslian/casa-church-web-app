@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 // components
 import Loader from "../components/Loader";
 import Pagination from "../components/Pagination";
+import Button from "../components/Button";
 
 // sevice
 import { findAllEvents } from "../services/events/eventsService";
