@@ -10,6 +10,8 @@ export default function Input({
   onChange,
   error,
   icon: IconOverride,
+  fullWidth = false,
+  className = "",
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -22,7 +24,7 @@ export default function Input({
   const inputType = isPassword ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className="mb-5">
+    <div className={`${fullWidth ? "w-full" : ""} ${className}`}>
       {label && (
         <label className="block text-sm font-medium text-white/90 mb-2">
           {label}

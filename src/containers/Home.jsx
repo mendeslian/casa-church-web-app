@@ -43,11 +43,11 @@ export default function HomePage() {
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent select-none" />
             <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-12 select-none">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight">
                 Bem-vindo à Casa Church Global
               </h1>
               <p className="my-3 text-white/80 text-sm sm:text-base">
-                Você é bem-vindo aqui.
+                Seja muito bem-vindo, esta casa também é sua!
               </p>
               <Button
                 onClick={() => {

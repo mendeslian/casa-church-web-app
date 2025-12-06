@@ -9,7 +9,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // components
 import Input from "../components/Input";
 import Button from "../components/Button";
-import Loader from "../components/Loader";
 
 import { login } from "../services/auth/authService";
 
@@ -87,6 +86,7 @@ export default function Login() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.email?.message}
+                    className="mb-5"
                   />
                 )}
               />
@@ -103,6 +103,7 @@ export default function Login() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.password?.message}
+                    className="mb-5"
                   />
                 )}
               />

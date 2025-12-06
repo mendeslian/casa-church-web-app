@@ -72,7 +72,7 @@ export default function Event() {
             <div className="flex flex-col justify-between">
               <div>
                 <p className="text-white/60 text-sm mb-2">{event.subtitle}</p>
-                <h1 className="text-4xl lg:text-5xl font-bold mb-6">
+                <h1 className="text-3xl lg:text-4xl font-bold mb-6">
                   {event.title}
                 </h1>
 

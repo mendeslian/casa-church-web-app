@@ -6,7 +6,7 @@ import Button from "../components/Button";
 // utils
 import { formatDate } from "../utils/utils";
 
-export function EventCard({ event }) {
+export default function EventCard({ event }) {
   const navigate = useNavigate();
 
   const formatTimeRange = (startDate, endDate) => {

@@ -65,12 +65,6 @@ export default function Pagination({
   return (
     <div className="flex items-center justify-center gap-1.5 mt-12">
       <NavButton
-        icon="ChevronsLeft"
-        disabled={page === 1}
-        onClick={() => goToPage(1)}
-      />
-
-      <NavButton
         icon="ChevronLeft"
         disabled={page === 1}
         onClick={() => goToPage(page - 1)}
@@ -93,12 +87,6 @@ export default function Pagination({
         icon="ChevronRight"
         disabled={page === totalPages}
         onClick={() => goToPage(page + 1)}
-      />
-
-      <NavButton
-        icon="ChevronsRight"
-        disabled={page === totalPages}
-        onClick={() => goToPage(totalPages)}
       />
     </div>
   );

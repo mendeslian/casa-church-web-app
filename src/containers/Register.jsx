@@ -97,6 +97,7 @@ export default function Register() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.name?.message}
+                    className="mb-5"
                   />
                 )}
               />
@@ -114,6 +115,7 @@ export default function Register() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.email?.message}
+                    className="mb-5"
                   />
                 )}
               />
@@ -130,6 +132,7 @@ export default function Register() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.password?.message}
+                    className="mb-5"
                   />
                 )}
               />
@@ -146,6 +149,7 @@ export default function Register() {
                     value={field.value}
                     onChange={field.onChange}
                     error={errors.confirmPassword?.message}
+                    className="mb-5"
                   />
                 )}
               />
