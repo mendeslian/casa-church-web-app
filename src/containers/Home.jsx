@@ -39,10 +39,10 @@ export default function HomePage() {
             <img
               src="https://images.unsplash.com/photo-1569759276108-31b8e7e43e7b?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Interior de igreja"
-              className="w-full h-[360px] sm:h-[420px] lg:h-[520px] object-cover"
+              className="w-full h-[360px] sm:h-[420px] lg:h-[520px] object-cover select-none"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
-            <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-12">
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent select-none" />
+            <div className="absolute inset-0 flex flex-col items-start justify-center px-8 md:px-12 select-none">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                 Bem-vindo à Casa Church Global
               </h1>
@@ -96,7 +96,7 @@ export default function HomePage() {
                   <img
                     src={t.image}
                     alt={t.title}
-                    className="w-full h-full object-cover hover:scale-110 duration-200"
+                    className="w-full h-full object-cover hover:scale-110 duration-200 select-none"
                   />
                 </div>
                 <div className="p-3">
