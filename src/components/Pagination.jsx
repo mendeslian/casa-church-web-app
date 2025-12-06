@@ -22,12 +22,13 @@ function NavButton({ icon, disabled, onClick }) {
   );
 }
 
-function PageButton({ page, isActive, onClick }) {
+function PageButton({ page, isActive, onClick, disabled }) {
   return (
     <Button
       size="sm"
       style={isActive ? 1 : 2}
       onClick={onClick}
+      disabled={disabled}
       className={`w-9! h-9! p-0! ${
         isActive ? "shadow-lg shadow-white/20" : ""
       }`}
@@ -50,23 +51,29 @@ export default function Pagination({
   totalPages = 1,
   onPageChange,
 }) {
-  if (totalPages <= 1) return null;
+  const total = Math.max(1, Number(totalPages) || 1);
+  const page = Math.max(1, Math.min(Number(currentPage) || 1, total));
+  const isDisabled = total <= 1;
 
-  const page = Math.max(1, Math.min(currentPage, totalPages));
-  const visiblePages = getVisiblePages(page, totalPages);
+  const visiblePages = getVisiblePages(page, total);
   const showStartEllipsis = visiblePages[0] > 1;
-  const showEndEllipsis = visiblePages[visiblePages.length - 1] < totalPages;
+  const showEndEllipsis = visiblePages[visiblePages.length - 1] < total;
 
   const goToPage = (targetPage) => {
-    const validPage = Math.max(1, Math.min(targetPage, totalPages));
+    if (isDisabled) return;
+    const validPage = Math.max(1, Math.min(targetPage, total));
     if (validPage !== page) onPageChange?.(validPage);
   };
 
   return (
-    <div className="flex items-center justify-center gap-1.5 mt-12">
+    <div
+      className={`flex items-center justify-center gap-1.5 mt-12 ${
+        isDisabled ? "opacity-40 pointer-events-none" : ""
+      }`}
+    >
       <NavButton
         icon="ChevronLeft"
-        disabled={page === 1}
+        disabled={isDisabled || page === 1}
         onClick={() => goToPage(page - 1)}
       />
 
@@ -77,6 +84,7 @@ export default function Pagination({
           key={p}
           page={p}
           isActive={p === page}
+          disabled={isDisabled}
           onClick={() => goToPage(p)}
         />
       ))}
@@ -85,7 +93,7 @@ export default function Pagination({
 
       <NavButton
         icon="ChevronRight"
-        disabled={page === totalPages}
+        disabled={isDisabled || page === total}
         onClick={() => goToPage(page + 1)}
       />
     </div>

@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
@@ -20,8 +20,6 @@ export default function Events() {
   const title = searchParams.get("title") || "";
   const [searchTerm, setSearchTerm] = useState(title);
 
-  const queryClient = useQueryClient();
-
   const { data, isLoading } = useQuery({
     queryKey: ["events", page, title],
     queryFn: () =>
@@ -31,11 +29,8 @@ export default function Events() {
         title: title || undefined,
       }),
     staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
     refetchOnMount: false,
-    keepPreviousData: true,
   });
 
   useEffect(() => {
@@ -44,43 +39,18 @@ export default function Events() {
 
   useEffect(() => {
     const sp = new URLSearchParams(searchParams);
-    if (searchTerm) sp.set("title", searchTerm);
-    else sp.delete("title");
-    sp.set("page", "1");
+    const currentTitle = sp.get("title") || "";
+    const nextTitle = (searchTerm || "").trim();
+    if (nextTitle === currentTitle) return;
+    if (nextTitle) {
+      sp.set("title", nextTitle);
+      sp.set("page", "1");
+    } else {
+      sp.delete("title");
+    }
     const t = setTimeout(() => setSearchParams(sp), 500);
     return () => clearTimeout(t);
   }, [searchTerm]);
-
-  useEffect(() => {
-    if (!data) return;
-    const current = Number(page);
-    const next = String(current + 1);
-    const prev = String(current - 1);
-    if (data.totalPages && current < data.totalPages) {
-      queryClient.prefetchQuery({
-        queryKey: ["events", next, title],
-        queryFn: () =>
-          findAllEvents({
-            page: Number(next),
-            limit: EVENTS_PER_PAGE,
-            title: title || undefined,
-          }),
-        staleTime: 5 * 60 * 1000,
-      });
-    }
-    if (current > 1) {
-      queryClient.prefetchQuery({
-        queryKey: ["events", prev, title],
-        queryFn: () =>
-          findAllEvents({
-            page: Number(prev),
-            limit: EVENTS_PER_PAGE,
-            title: title || undefined,
-          }),
-        staleTime: 5 * 60 * 1000,
-      });
-    }
-  }, [data, page, title]);
 
   const handlePageChange = (newPage) => {
     setSearchParams((prev) => {
@@ -124,11 +94,19 @@ export default function Events() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[600px]">
-                {data?.events.map((event) => (
-                  <EventCard key={event.id} event={event} />
-                ))}
-              </div>
+              {data?.events?.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-[600px]">
+                  {data.events.map((event) => (
+                    <EventCard key={event.id} event={event} />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full min-h-[600px] m-auto flex flex-col items-center justify-center">
+                  <p className="text-sm text-white/50">
+                    Nenhum evento encontrado
+                  </p>
+                </div>
+              )}
 
               <Pagination
                 currentPage={page}
