@@ -24,14 +24,6 @@ export default function Header() {
 
   const menuItems = [
     {
-      label: "Diego Borda Castro",
-      type: "label",
-      className: "text-[10px] text-white/50",
-    },
-    // {
-    //   type: "separator",
-    // },
-    {
       label: "Perfil",
       icon: "User",
       onSelect: () => navigate("/perfil"),
@@ -81,11 +73,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-3">
           <Dropdown items={menuItems} align="end">
-            <Avatar
-              name="Diego Borda Castro"
-              size="sm"
-              className="cursor-pointer"
-            />
+            <Avatar name="Hugo Fraga" size="sm" className="cursor-pointer" />
           </Dropdown>
         </div>
       </div>
