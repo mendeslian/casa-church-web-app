@@ -1,116 +1,105 @@
-import * as LucideIcons from "lucide-react";
-import Loader from "./Loader";
+import Button from "./Button";
 
-export default function Button({
-  children,
-  onClick,
-  style = 1,
-  size = "md",
-  disabled = false,
-  className = "",
-  icon = null,
-  iconPosition = "left",
-  iconSize = 18,
-  iconStrokeWidth = 2,
-  fullWidth = false,
-  loading = false,
-  loaderType = "ClipLoader",
-  loaderSize = null,
-}) {
-  const baseStyles =
-    "font-medium transition-all duration-300 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2";
+export default function Pagination({ page = 1, totalPages = 1, onPageChange }) {
+  const current = Number(page) || 1;
+  const total = Number(totalPages) || 1;
+  const start = Math.max(1, current - 2);
+  const end = Math.min(total, current + 2);
+  const pages = [];
+  for (let p = start; p <= end; p++) pages.push(p);
 
-  const variants = {
-    1: "bg-white text-black hover:bg-gray-100 focus:ring-white",
-    2: "bg-white/10 text-white hover:bg-white/20",
-    3: "text-white hover:text-gray-300 underline focus:ring-white",
-  };
+  const goTo = (p) => {
+    if (!onPageChange) return;
+    const next = Math.min(Math.max(1, p), total);
 
-  const sizes = {
-    sm: "py-1.5 px-3 text-sm",
-    md: "py-2 px-4 text-base",
-    lg: "py-3 px-6 text-lg",
-  };
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
 
-  const iconOnlySizes = {
-    sm: "p-1.5",
-    md: "p-2",
-    lg: "p-3",
-  };
-
-  const loaderSizes = {
-    sm: 14,
-    md: 18,
-    lg: 22,
-  };
-
-  const loaderColors = {
-    1: "#000000",
-    2: "#ffffff",
-    3: "#ffffff",
-  };
-
-  const widthClass = fullWidth ? "w-full" : "";
-  const variantClass = variants[style] || variants[1];
-  const sizeClass = children ? sizes[size] || sizes.md : iconOnlySizes[size];
-
-  const renderIcon = () => {
-    if (!icon) return null;
-
-    if (typeof icon === "string") {
-      const IconComponent = LucideIcons[icon];
-      if (!IconComponent) {
-        console.warn(`Ícone "${icon}" não encontrado no lucide-react`);
-        return null;
-      }
-      return <IconComponent size={iconSize} strokeWidth={iconStrokeWidth} />;
-    }
-
-    return icon;
-  };
-
-  const iconElement = renderIcon();
-
-  const renderContent = () => {
-    if (loading) {
-      return (
-        <Loader
-          type={loaderType}
-          color={loaderColors[style] || loaderColors[1]}
-          size={loaderSize || loaderSizes[size] || loaderSizes.md}
-        />
-      );
-    }
-
-    if (!children) {
-      return iconElement;
-    }
-
-    if (iconElement) {
-      return iconPosition === "left" ? (
-        <>
-          {iconElement}
-          {children}
-        </>
-      ) : (
-        <>
-          {children}
-          {iconElement}
-        </>
-      );
-    }
-
-    return children;
+    onPageChange(next);
   };
 
   return (
-    <button
-      className={`${baseStyles} ${variantClass} ${sizeClass} ${widthClass} ${className}`}
-      onClick={onClick}
-      disabled={disabled || loading}
-      title={!children && icon ? `${icon} button` : ""}
-    >
-      {renderContent()}
-    </button>
+    <div className="flex flex-col items-center gap-4 mt-12">
+      <div className="flex items-center gap-1.5">
+        {/* Primeira página */}
+        <Button
+          size="sm"
+          style={2}
+          disabled={current === 1}
+          onClick={() => goTo(1)}
+          icon="ChevronsLeft"
+          iconSize={16}
+          className="w-9! h-9! p-0!"
+        />
+
+        {/* Página anterior */}
+        <Button
+          size="sm"
+          style={2}
+          disabled={current === 1}
+          onClick={() => goTo(current - 1)}
+          icon="ChevronLeft"
+          iconSize={16}
+          className="w-9! h-9! p-0!"
+        />
+
+        {/* Reticências inicial */}
+        {start > 1 && (
+          <span className="w-9 h-9 flex items-center justify-center text-white/40 text-sm">
+            ...
+          </span>
+        )}
+
+        {/* Números das páginas */}
+        {pages.map((p) => (
+          <Button
+            key={p}
+            size="sm"
+            style={p === current ? 1 : 2}
+            onClick={() => goTo(p)}
+            className={`w-9! h-9! p-0! ${
+              p === current ? "shadow-lg shadow-white/20" : ""
+            }`}
+          >
+            {p}
+          </Button>
+        ))}
+
+        {/* Reticências final */}
+        {end < total && (
+          <span className="w-9 h-9 flex items-center justify-center text-white/40 text-sm">
+            ...
+          </span>
+        )}
+
+        {/* Próxima página */}
+        <Button
+          size="sm"
+          style={2}
+          disabled={current === total}
+          onClick={() => goTo(current + 1)}
+          icon="ChevronRight"
+          iconSize={16}
+          className="w-9! h-9! p-0!"
+        />
+
+        {/* Última página */}
+        <Button
+          size="sm"
+          style={2}
+          disabled={current === total}
+          onClick={() => goTo(total)}
+          icon="ChevronsRight"
+          iconSize={16}
+          className="w-9! h-9! p-0!"
+        />
+      </div>
+
+      {/* <p className="text-xs text-white/50">
+        Página {current} de {total}
+      </p> */}
+    </div>
   );
 }

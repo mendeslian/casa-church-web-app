@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
@@ -9,6 +10,14 @@ import Register from "./containers/Register.jsx";
 import ToastProvider from "./components/ToastProvider.jsx";
 
 export default function App() {
+  try {
+    const raw = localStorage.getItem("user");
+    const token = raw ? JSON.parse(raw)?.token : null;
+    axios.defaults.headers.common["Authorization"] = token ?? "";
+  } catch {
+    axios.defaults.headers.common["Authorization"] = "";
+  }
+
   return (
     <>
       <Routes>
