@@ -12,7 +12,11 @@ export default function Footer() {
   ];
 
   const socialLinks = [
-    { icon: Instagram, url: "https://instagram.com", label: "Instagram" },
+    {
+      icon: Instagram,
+      url: "https://www.instagram.com/casachurchglobal",
+      label: "Instagram",
+    },
     { icon: Facebook, url: "https://facebook.com", label: "Facebook" },
     { icon: Youtube, url: "https://youtube.com", label: "YouTube" },
   ];

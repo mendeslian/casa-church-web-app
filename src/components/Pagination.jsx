@@ -1,98 +1,105 @@
 import Button from "./Button";
 
-export default function Pagination({ page = 1, totalPages = 1, onPageChange }) {
-  const current = Number(page) || 1;
-  const total = Number(totalPages) || 1;
-  const start = Math.max(1, current - 2);
-  const end = Math.min(total, current + 2);
-  const pages = [];
-  for (let p = start; p <= end; p++) pages.push(p);
+function getVisiblePages(current, total) {
+  const delta = 2;
+  const start = Math.max(1, current - delta);
+  const end = Math.min(total, current + delta);
 
-  const goTo = (p) => {
-    if (!onPageChange) return;
-    const next = Math.min(Math.max(1, p), total);
+  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
+}
 
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+function NavButton({ icon, disabled, onClick }) {
+  return (
+    <Button
+      size="sm"
+      style={2}
+      disabled={disabled}
+      onClick={onClick}
+      icon={icon}
+      iconSize={16}
+      className="w-9! h-9! p-0!"
+    />
+  );
+}
 
-    onPageChange(next);
+function PageButton({ page, isActive, onClick }) {
+  return (
+    <Button
+      size="sm"
+      style={isActive ? 1 : 2}
+      onClick={onClick}
+      className={`w-9! h-9! p-0! ${
+        isActive ? "shadow-lg shadow-white/20" : ""
+      }`}
+    >
+      {page}
+    </Button>
+  );
+}
+
+function Ellipsis() {
+  return (
+    <span className="w-9 h-9 flex items-center justify-center text-white/40 text-sm">
+      ...
+    </span>
+  );
+}
+
+export default function Pagination({
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+}) {
+  if (totalPages <= 1) return null;
+
+  const page = Math.max(1, Math.min(currentPage, totalPages));
+  const visiblePages = getVisiblePages(page, totalPages);
+  const showStartEllipsis = visiblePages[0] > 1;
+  const showEndEllipsis = visiblePages[visiblePages.length - 1] < totalPages;
+
+  const goToPage = (targetPage) => {
+    const validPage = Math.max(1, Math.min(targetPage, totalPages));
+    if (validPage !== page) onPageChange?.(validPage);
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 mt-12">
-      <div className="flex items-center gap-1.5">
-        <Button
-          size="sm"
-          style={2}
-          disabled={current === 1}
-          onClick={() => goTo(1)}
-          icon="ChevronsLeft"
-          iconSize={16}
-          className="w-9! h-9! p-0!"
+    <div className="flex items-center justify-center gap-1.5 mt-12">
+      <NavButton
+        icon="ChevronsLeft"
+        disabled={page === 1}
+        onClick={() => goToPage(1)}
+      />
+
+      <NavButton
+        icon="ChevronLeft"
+        disabled={page === 1}
+        onClick={() => goToPage(page - 1)}
+      />
+
+      {showStartEllipsis && <Ellipsis />}
+
+      {visiblePages.map((p) => (
+        <PageButton
+          key={p}
+          page={p}
+          isActive={p === page}
+          onClick={() => goToPage(p)}
         />
+      ))}
 
-        <Button
-          size="sm"
-          style={2}
-          disabled={current === 1}
-          onClick={() => goTo(current - 1)}
-          icon="ChevronLeft"
-          iconSize={16}
-          className="w-9! h-9! p-0!"
-        />
+      {showEndEllipsis && <Ellipsis />}
 
-        {start > 1 && (
-          <span className="w-9 h-9 flex items-center justify-center text-white/40 text-sm">
-            ...
-          </span>
-        )}
+      <NavButton
+        icon="ChevronRight"
+        disabled={page === totalPages}
+        onClick={() => goToPage(page + 1)}
+      />
 
-        {pages.map((p) => (
-          <Button
-            key={p}
-            size="sm"
-            style={p === current ? 1 : 2}
-            onClick={() => goTo(p)}
-            className={`w-9! h-9! p-0! ${
-              p === current ? "shadow-lg shadow-white/20" : ""
-            }`}
-          >
-            {p}
-          </Button>
-        ))}
-
-        {end < total && (
-          <span className="w-9 h-9 flex items-center justify-center text-white/40 text-sm">
-            ...
-          </span>
-        )}
-
-        <Button
-          size="sm"
-          style={2}
-          disabled={current === total}
-          onClick={() => goTo(current + 1)}
-          icon="ChevronRight"
-          iconSize={16}
-          className="w-9! h-9! p-0!"
-        />
-
-        <Button
-          size="sm"
-          style={2}
-          disabled={current === total}
-          onClick={() => goTo(total)}
-          icon="ChevronsRight"
-          iconSize={16}
-          className="w-9! h-9! p-0!"
-        />
-      </div>
-
-      {/* <p className="text-xs text-white/50">
-        Página {current} de {total}
-      </p> */}
+      <NavButton
+        icon="ChevronsRight"
+        disabled={page === totalPages}
+        onClick={() => goToPage(totalPages)}
+      />
     </div>
   );
 }

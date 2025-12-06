@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toastError, toastSuccess } from "../utils/toast";
+import { toastError, toastSuccess } from "../utils/toastHelper";
 
 // components
 import Input from "../components/Input";

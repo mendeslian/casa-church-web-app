@@ -1,30 +1,37 @@
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 // components
 import Loader from "../components/Loader";
 import Pagination from "../components/Pagination";
-import Button from "../components/Button";
+import { EventCard } from "../components/EventCard";
 
-// sevice
+// service
 import { findAllEvents } from "../services/events/eventsService";
 
-// utils
-import { EventCard } from "../components/EventCard";
+const EVENTS_PER_PAGE = 8;
 
 export default function Events() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = Number(searchParams.get("page") || 1);
-  const limit = 8;
+  const page = searchParams.get("page") || 1;
 
   const { data, isLoading } = useQuery({
-    queryKey: ["events", page, limit],
-    queryFn: () => findAllEvents({ page, limit }),
+    queryKey: ["events", page],
+    queryFn: () => findAllEvents({ page, limit: EVENTS_PER_PAGE }),
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-    keepPreviousData: true,
     refetchOnWindowFocus: false,
   });
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
+  const handlePageChange = (newPage) => {
+    searchParams.set("page", newPage);
+    setSearchParams(searchParams);
+  };
 
   return (
     <div className="min-h-screen bg-[#0f1115] text-white flex flex-col">
@@ -34,6 +41,7 @@ export default function Events() {
           <p className="mt-4 mb-8 text-white/80 text-sm sm:text-base">
             Confira nossos eventos
           </p>
+
           {isLoading ? (
             <div className="w-full min-h-[600px] flex items-center justify-center">
               <Loader />
@@ -45,19 +53,12 @@ export default function Events() {
                   <EventCard key={event.id} event={event} />
                 ))}
               </div>
-              <div className="mt-6">
-                <Pagination
-                  page={data?.page ?? page}
-                  totalPages={data?.totalPages ?? 1}
-                  onPageChange={(p) =>
-                    setSearchParams((prev) => {
-                      const sp = new URLSearchParams(prev);
-                      sp.set("page", String(p));
-                      return sp;
-                    })
-                  }
-                />
-              </div>
+
+              <Pagination
+                currentPage={page}
+                totalPages={data?.totalPages ?? 1}
+                onPageChange={handlePageChange}
+              />
             </>
           )}
         </section>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toastSuccess, toastError } from "../utils/toast";
+import { toastSuccess, toastError } from "../utils/toastHelper";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
