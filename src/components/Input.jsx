@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, X } from "lucide-react";
 
 export default function Input({
   label,
@@ -12,6 +12,8 @@ export default function Input({
   icon: IconOverride,
   fullWidth = false,
   className = "",
+  allowClear = false,
+  onClear,
 }) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -62,6 +64,19 @@ export default function Input({
             className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        )}
+
+        {!isPassword && allowClear && value && (
+          <button
+            type="button"
+            onClick={() =>
+              onClear ? onClear() : onChange?.({ target: { value: "" } })
+            }
+            aria-label="Limpar"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors cursor-pointer"
+          >
+            <X size={18} />
           </button>
         )}
       </div>

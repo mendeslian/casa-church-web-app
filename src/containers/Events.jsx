@@ -83,8 +83,9 @@ export default function Events() {
               icon={Search}
               value={searchTerm}
               onChange={handleSearchChange}
-              fullWidth
-              className="m-0!"
+              onClear={() => setSearchTerm("")}
+              allowClear
+              className="w-full md:w-90"
             />
           </div>
 
