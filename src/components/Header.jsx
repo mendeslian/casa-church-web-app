@@ -1,15 +1,52 @@
+import axios from "axios";
 import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // components
-import Button from "./Button";
 import Avatar from "./Avatar";
+import Dropdown from "./Dropdown";
 
 // assets
 import LogoName from "../assets/logo-name.png";
 
 export default function Header() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  function logout() {
+    try {
+      localStorage.removeItem("user");
+      delete axios.defaults.headers.common["Authorization"];
+      navigate("/login");
+    } catch {
+      navigate("/login");
+    }
+  }
+
+  const menuItems = [
+    {
+      label: "Diego Borda Castro",
+      type: "label",
+      className: "text-[10px] text-white/50",
+    },
+    // {
+    //   type: "separator",
+    // },
+    {
+      label: "Perfil",
+      icon: "User",
+      onSelect: () => navigate("/perfil"),
+    },
+    {
+      type: "separator",
+    },
+    {
+      label: "Sair",
+      icon: "LogOut",
+      className: "text-red-600 hover:bg-red-200/10",
+      onSelect: logout,
+    },
+  ];
+
   return (
     <header className="min-h-16 border-b border-white/10 bg-[#0f1115] text-white">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -43,8 +80,13 @@ export default function Header() {
           </Link>
         </nav>
         <div className="flex items-center gap-3">
-          {/* <Button onClick={() => navigate("/login")}>Entrar</Button> */}
-          <Avatar name="Diego Borda Castro" size="sm" />
+          <Dropdown items={menuItems} align="end">
+            <Avatar
+              name="Diego Borda Castro"
+              size="sm"
+              className="cursor-pointer"
+            />
+          </Dropdown>
         </div>
       </div>
     </header>

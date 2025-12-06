@@ -23,7 +23,7 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-white/10">
-      <div className="max-w-screen-xl mx-auto px-4 py-10">
+      <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="flex flex-col items-center gap-8">
           <img
             src={Logo}
@@ -64,7 +64,7 @@ export default function Footer() {
             })}
           </div>
 
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+          <div className="w-full h-px bg-linear-to-r from-transparent via-white/20 to-transparent" />
 
           <p className="text-xs text-white/50 text-center">
             Casa Church Global — Todos os direitos reservados © {currentYear}
