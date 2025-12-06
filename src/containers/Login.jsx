@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 // components
 import Input from "../components/Input";
 import Button from "../components/Button";
+import Loader from "../components/Loader";
 
 import { login } from "../services/auth/authService";
 
@@ -113,7 +114,7 @@ export default function Login() {
                 fullWidth
                 style={1}
                 size="lg"
-                disabled={isSubmitting}
+                loading={isSubmitting}
               >
                 Entrar
               </Button>

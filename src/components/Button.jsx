@@ -1,4 +1,5 @@
 import * as LucideIcons from "lucide-react";
+import Loader from "./Loader";
 
 export default function Button({
   children,
@@ -12,6 +13,9 @@ export default function Button({
   iconSize = 18,
   iconStrokeWidth = 2,
   fullWidth = false,
+  loading = false,
+  loaderType = "ClipLoader",
+  loaderSize = null,
 }) {
   const baseStyles =
     "font-medium transition-all duration-300 cursor-pointer rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2";
@@ -34,9 +38,20 @@ export default function Button({
     lg: "p-3",
   };
 
-  const widthClass = fullWidth ? "w-full" : "";
+  const loaderSizes = {
+    sm: 14,
+    md: 18,
+    lg: 22,
+  };
 
-  const variantClass = variants[style] || variants.primary;
+  const loaderColors = {
+    1: "#000000",
+    2: "#ffffff",
+    3: "#ffffff",
+  };
+
+  const widthClass = fullWidth ? "w-full" : "";
+  const variantClass = variants[style] || variants[1];
   const sizeClass = children ? sizes[size] || sizes.md : iconOnlySizes[size];
 
   const renderIcon = () => {
@@ -57,6 +72,16 @@ export default function Button({
   const iconElement = renderIcon();
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <Loader
+          type={loaderType}
+          color={loaderColors[style] || loaderColors[1]}
+          size={loaderSize || loaderSizes[size] || loaderSizes.md}
+        />
+      );
+    }
+
     if (!children) {
       return iconElement;
     }
@@ -82,7 +107,7 @@ export default function Button({
     <button
       className={`${baseStyles} ${variantClass} ${sizeClass} ${widthClass} ${className}`}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
       title={!children && icon ? `${icon} button` : ""}
     >
       {renderContent()}

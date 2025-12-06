@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import Logo from "../assets/logo.png";
 
 const baseOptions = {
+  containerId: "global",
   icon: React.createElement("img", {
     src: Logo,
     alt: "Casa Church",

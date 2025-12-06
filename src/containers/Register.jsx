@@ -8,6 +8,7 @@ import { toastError, toastSuccess } from "../utils/toast";
 // components
 import Input from "../components/Input";
 import Button from "../components/Button";
+import Loader from "../components/Loader";
 
 // services
 import { create } from "../services/users/usersService";
@@ -154,7 +155,7 @@ export default function Register() {
                 fullWidth
                 style={1}
                 size="lg"
-                disabled={isSubmitting}
+                loading={isSubmitting}
               >
                 Cadastrar
               </Button>
