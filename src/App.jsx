@@ -1,12 +1,16 @@
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import PublicRoute from "./components/PublicRoute.jsx";
+
+// containers
 import Home from "./containers/Home.jsx";
 import Events from "./containers/Events.jsx";
 import Event from "./containers/Event.jsx";
 import Login from "./containers/Login.jsx";
 import Register from "./containers/Register.jsx";
+
+// components
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import PublicRoute from "./components/PublicRoute.jsx";
 import ToastProvider from "./components/ToastProvider.jsx";
 
 export default function App() {
@@ -17,6 +21,22 @@ export default function App() {
   } catch {
     axios.defaults.headers.common["Authorization"] = "";
   }
+
+  const getStoredToken = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    return user?.token || null;
+  };
+
+  const setAuthHeader = (token) => {
+    if (token) {
+      axios.defaults.headers.common["Authorization"] = token;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  };
+
+  setAuthHeader(getStoredToken());
 
   return (
     <>

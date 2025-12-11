@@ -10,6 +10,8 @@ import Dropdown from "./Dropdown";
 import LogoName from "../assets/logo-name.png";
 
 export default function Header() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userName = user.name;
   const navigate = useNavigate();
 
   function logout() {
@@ -73,7 +75,7 @@ export default function Header() {
         </nav>
         <div className="flex items-center gap-3">
           <Dropdown items={menuItems} align="end">
-            <Avatar name="Hugo Fraga" size="sm" className="cursor-pointer" />
+            <Avatar name={userName} size="sm" className="cursor-pointer" />
           </Dropdown>
         </div>
       </div>

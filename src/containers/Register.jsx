@@ -80,7 +80,7 @@ export default function Register() {
               draggable={false}
               className="select-none mx-auto"
             />
-            <h1 className="text-4xl font-bold">Crie sua conta</h1>
+            <h1 className="text-4xl font-bold my-4">Crie sua conta</h1>
             <p className="text-white/60 text-sm">Junte-se à nossa comunidade</p>
           </div>
           <div>
