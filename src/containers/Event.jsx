@@ -2,7 +2,6 @@ import { MapPin, Calendar, Clock, Mail, Phone, ArrowLeft } from "lucide-react";
 import Button from "../components/Button";
 
 export default function Event() {
-  // IDs de imagens do Unsplash relacionadas a igrejas
   const churchImages = [
     "photo-1469022563149-aa64dbd37dae",
     "photo-1531573787031-e74ece2cf639",
@@ -20,7 +19,6 @@ export default function Event() {
     return `https://images.unsplash.com/${imageId}?w=800&h=500&fit=crop&q=80`;
   };
 
-  // Dados do evento (você pode passar via route params no futuro)
   const event = {
     id: 1,
     title: "Conferência de Liderança",
@@ -47,7 +45,7 @@ export default function Event() {
   return (
     <div className="min-h-screen bg-[#0f1115] text-white">
       <main>
-        <div className="max-w-screen-xl mx-auto px-4 py-6">
+        <div className="max-w-7xl mx-auto px-4 py-6">
           <Button icon="ArrowLeft" iconSize={16} onClick={handleBack} style={1}>
             Voltar
           </Button>
@@ -58,7 +56,7 @@ export default function Event() {
           </p>
         </div>
 
-        <section className="max-w-screen-xl mx-auto px-4 mb-12">
+        <section className="max-w-7xl mx-auto px-4 mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div
               className="w-full h-80 rounded-xl overflow-hidden border border-white/10"
@@ -78,24 +76,15 @@ export default function Event() {
 
                 <div className="space-y-4 mb-8">
                   <div className="flex items-center gap-3 text-white/80">
-                    <Calendar
-                      size={20}
-                      className="text-neutral-500 flex-shrink-0"
-                    />
+                    <Calendar size={20} className="text-neutral-500 shrink-0" />
                     <span>{event.date}</span>
                   </div>
                   <div className="flex items-center gap-3 text-white/80">
-                    <Clock
-                      size={20}
-                      className="text-neutral-500 flex-shrink-0"
-                    />
+                    <Clock size={20} className="text-neutral-500 shrink-0" />
                     <span>{event.time}</span>
                   </div>
                   <div className="flex items-center gap-3 text-white/80">
-                    <MapPin
-                      size={20}
-                      className="text-neutral-500 flex-shrink-0"
-                    />
+                    <MapPin size={20} className="text-neutral-500 shrink-0" />
                     <span>{event.location}</span>
                   </div>
                 </div>
@@ -109,7 +98,7 @@ export default function Event() {
         </section>
 
         {/* Sobre o Evento */}
-        <section className="max-w-screen-xl mx-auto px-4 mb-12">
+        <section className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-2xl font-bold mb-6">Sobre o Evento</h2>
           <p className="text-white/80 leading-relaxed">
             {event.fullDescription}
@@ -117,10 +106,10 @@ export default function Event() {
         </section>
 
         {/* Localização */}
-        <section className="max-w-screen-xl mx-auto px-4 mb-12">
+        <section className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-2xl font-bold mb-6">Localização</h2>
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-neutral-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-neutral-600 flex items-center justify-center shrink-0">
               <MapPin size={20} className="text-white" />
             </div>
             <span className="text-white/80">{event.address}</span>
@@ -142,7 +131,7 @@ export default function Event() {
         </section>
 
         {/* Informações Adicionais */}
-        <section className="max-w-screen-xl mx-auto px-4 mb-12">
+        <section className="max-w-7xl mx-auto px-4 mb-12">
           <h2 className="text-2xl font-bold mb-8">Informações Adicionais</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -164,7 +153,7 @@ export default function Event() {
 
             <div>
               <h3 className="text-white/80 text-sm font-semibold mb-4 uppercase tracking-wide">
-                Contato
+                Contatos
               </h3>
               <div className="space-y-4">
                 <div className="border-b border-white/10 pb-4">
@@ -191,7 +180,7 @@ export default function Event() {
           </div>
         </section>
 
-        <section className="max-w-screen-xl mx-auto px-4 py-16 border-t border-white/10">
+        <section className="max-w-7xl mx-auto px-4 py-16 border-t border-white/10">
           <div className="text-left">
             <h2 className="text-3xl font-bold mb-6">Pronto para participar?</h2>
             <Button size="lg">Inscrever-se no Evento</Button>

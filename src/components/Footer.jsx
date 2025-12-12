@@ -8,7 +8,7 @@ export default function Footer() {
     { label: "Sobre Nós", href: "/sobre" },
     { label: "Eventos", href: "/eventos" },
     { label: "Sermões", href: "/sermoes" },
-    { label: "Contato", href: "/contato" },
+    { label: "Contatos", href: "/contatos" },
   ];
 
   const socialLinks = [

@@ -69,8 +69,8 @@ export default function Header() {
           <Link to="/eventos" className="text-white/80 hover:text-white">
             Eventos
           </Link>
-          <Link to="/contato" className="text-white/80 hover:text-white">
-            Contato
+          <Link to="/contatos" className="text-white/80 hover:text-white">
+            Contatos
           </Link>
         </nav>
         <div className="flex items-center gap-3">
