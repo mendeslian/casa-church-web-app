@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
@@ -12,8 +12,10 @@ const POSTS_PER_PAGE = 10;
 export default function Social() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get("page")) || 1;
+  const [now, setNow] = useState(() => Date.now());
 
-  const { data, isLoading } = useQuery({
+
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["posts", page],
     queryFn: () =>
       findAllPosts({
@@ -22,9 +24,18 @@ export default function Social() {
         orderBy: "createdAt",
         orderDirection: "DESC",
       }),
-    staleTime: 30 * 1000,
-    refetchOnWindowFocus: false,
+    refetchInterval: 60_000,
+    refetchIntervalInBackground: true,
   });
+
+    useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 60_000); // atualiza a cada 1 minuto
+
+    return () => clearInterval(interval);
+  }, []);
+
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -47,7 +58,13 @@ export default function Social() {
 
         {/* Criar Post */}
         <div className="mb-6">
-          <CreatePost />
+          <CreatePost onPostCreated={() => {
+            if (page !== 1) {
+              setSearchParams({ page: "1" });
+            } else {
+              refetch();
+            }
+          }} />
         </div>
 
         {/* Feed de Posts */}
@@ -60,7 +77,7 @@ export default function Social() {
             {data?.posts?.length > 0 ? (
               <div className="space-y-4 mb-8">
                 {data.posts.map((post) => (
-                  <Post key={post.id} post={post} />
+                  <Post key={post.id} post={post} now={now} />
                 ))}
               </div>
             ) : (

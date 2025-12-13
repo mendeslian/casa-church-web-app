@@ -10,7 +10,7 @@ import { toastSuccess, toastError } from "../utils/toastHelper";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-export default function Post({ post, onDelete }) {
+export default function Post({ post, onDelete, now}) {
   const [showComments, setShowComments] = useState(false);
   const [commentContent, setCommentContent] = useState("");
   const queryClient = useQueryClient();
@@ -119,8 +119,13 @@ export default function Post({ post, onDelete }) {
   };
 
   const formatTime = (date) => {
-    return formatDistanceToNow(new Date(date), { addSuffix: true, locale: ptBR });
-  };
+  return formatDistanceToNow(new Date(date), {
+    addSuffix: true,
+    locale: ptBR,
+    baseDate: new Date(now),
+  });
+};
+
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm p-4">

@@ -1,36 +1,41 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
+import { jwtDecode } from "jwt-decode";
 import Button from "./Button";
 import Avatar from "./Avatar";
 import { createPost } from "../services/posts/postsService";
 import { toastSuccess, toastError } from "../utils/toastHelper";
 
-export default function CreatePost() {
+export default function CreatePost({ onPostCreated }) {
   const [content, setContent] = useState("");
-  const queryClient = useQueryClient();
   const user = JSON.parse(localStorage.getItem("user"));
 
   const createPostMutation = useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      queryClient.invalidateQueries(["posts"]);
       setContent("");
-      toastSuccess("Post criado com sucesso!", "success");
+      toastSuccess("Post criado com sucesso!");
+      onPostCreated?.();
     },
     onError: (error) => {
-      toastError(error?.response?.data?.message || "Erro ao criar post", "error");
+      toastError(error?.response?.data?.message || "Erro ao criar post");
     },
   });
 
   const handleSubmit = () => {
     if (!content.trim()) {
-      toastError("Digite algo para postar", "error");
+      toastError("Digite algo para postar");
       return;
     }
 
+    // Decodifica o token para pegar o userId
+    const token = user.token;
+    const decoded = jwtDecode(token);
+    const userId = decoded.sub || decoded.id || decoded.userId;
+
     createPostMutation.mutate({
-      userId: user.id,
+      userId: userId,
       content: content.trim(),
     });
   };
