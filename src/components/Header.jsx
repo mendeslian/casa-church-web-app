@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 // components
 import Avatar from "./Avatar";
@@ -13,6 +14,17 @@ export default function Header() {
   const user = JSON.parse(localStorage.getItem("user"));
   const userName = user.name;
   const navigate = useNavigate();
+
+  // Verifica se o usuário é admin
+  let isAdmin = false;
+  try {
+    if (user && user.token) {
+      const decoded = jwtDecode(user.token);
+      isAdmin = decoded.role === "admin";
+    }
+  } catch (error) {
+    console.error("Erro ao verificar role:", error);
+  }
 
   function logout() {
     try {
@@ -30,6 +42,18 @@ export default function Header() {
       icon: "User",
       onSelect: () => navigate("/perfil"),
     },
+    // Adiciona item Admin se for admin
+    ...(isAdmin ? [
+      {
+        type: "separator",
+      },
+      {
+        label: "Painel Admin",
+        icon: "Shield",
+        className: "text-purple-500 hover:bg-purple-500/10",
+        onSelect: () => navigate("/admin/dashboard"),
+      },
+    ] : []),
     {
       type: "separator",
     },
