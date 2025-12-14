@@ -8,6 +8,7 @@ import Event from "./containers/Event.jsx";
 import Login from "./containers/Login.jsx";
 import Register from "./containers/Register.jsx";
 import Contacts from "./containers/Contacts.jsx";
+import Social from "./containers/Social.jsx"
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="/eventos" element={<Events />} />
           <Route path="/evento/:id" element={<Event />} />
           <Route path="/contatos" element={<Contacts />} />
+          <Route path="/social" element={<Social />} />
         </Route>
 
         <Route element={<PublicRoute />}>
