@@ -4,10 +4,8 @@ import {
   Calendar, 
   MessageSquare, 
   Book,
-  TrendingUp,
   Activity,
-  MapPin,
-  Mail
+  MapPin
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -29,9 +27,27 @@ export default function AdminDashboard() {
     queryFn: () => findAllUsers({ page: 1, limit: 1 }),
   });
 
+  // Busca TODOS os eventos para contar apenas os ativos
   const { data: eventsData } = useQuery({
     queryKey: ["admin-events-count"],
-    queryFn: () => findAllEvents({ page: 1, limit: 1 }),
+    queryFn: async () => {
+      const response = await findAllEvents({ page: 1, limit: 100 });
+      const today = new Date();
+      
+      // Conta apenas eventos que ainda não terminaram (endDate >= hoje)
+      const activeEvents = response.events?.filter(event => {
+        const eventEndDate = new Date(event.endDate);
+        const isActive = eventEndDate >= today;
+        console.log(`Evento: ${event.title} | End: ${event.endDate} | Ativo: ${isActive}`);
+        return isActive;
+      }) || [];
+      
+      return {
+        ...response,
+        activeCount: activeEvents.length,
+        total: response.total
+      };
+    },
   });
 
   const { data: postsData } = useQuery({
@@ -44,14 +60,39 @@ export default function AdminDashboard() {
     queryFn: () => findAllSermons({ page: 1, limit: 1 }),
   });
 
-  const { data: activities, isLoading: loadingActivities } = useQuery({
-    queryKey: ["admin-activities"],
-    queryFn: () => getRecentActivities({ limit: 5 }),
-  });
+const { data: activities, isLoading: loadingActivities } = useQuery({
+  queryKey: ["admin-activities"],
+  queryFn: async () => {
+    // ⬆️ busca MAIS registros
+    const result = await getRecentActivities({ limit: 50 });
+
+    const BLOCKED_ACTIONS = ["GET", "READ", "VIEW"];
+
+    const filteredActivities =
+      result.activities?.filter(activity =>
+        !BLOCKED_ACTIONS.includes(
+          activity.action?.toUpperCase()
+        )
+      ) || [];
+
+    return {
+      ...result,
+      // ⬇️ só os 5 primeiros relevantes
+      activities: filteredActivities.slice(0, 5),
+    };
+  },
+});
+
+
+
 
   const { data: upcomingEvents, isLoading: loadingEvents } = useQuery({
     queryKey: ["admin-upcoming-events"],
-    queryFn: () => getUpcomingEvents({ limit: 5 }),
+    queryFn: async () => {
+      const result = await getUpcomingEvents({ limit: 5 });
+      console.log("🔜 PRÓXIMOS EVENTOS:", result);
+      return result;
+    },
   });
 
   const stats = [
@@ -64,7 +105,7 @@ export default function AdminDashboard() {
     },
     {
       title: "Eventos Ativos",
-      value: eventsData?.total || "0",
+      value: eventsData?.activeCount || "0",
       icon: Calendar,
       color: "text-green-500",
       bgColor: "bg-green-500/10",
@@ -86,13 +127,17 @@ export default function AdminDashboard() {
   ];
 
   const getActivityIcon = (action) => {
-    switch (action) {
-      case "CREATE":
+    const actionUpper = action?.toUpperCase();
+    switch (actionUpper) {
+      case "POST":
         return <Activity size={16} className="text-green-500" />;
-      case "UPDATE":
+      case "GET":
         return <Activity size={16} className="text-blue-500" />;
       case "DELETE":
         return <Activity size={16} className="text-red-500" />;
+      case "PATCH":
+      case "PUT":
+        return <Activity size={16} className="text-yellow-500" />;
       default:
         return <Activity size={16} className="text-white/60" />;
     }
@@ -107,6 +152,51 @@ export default function AdminDashboard() {
     } catch {
       return "há algum tempo";
     }
+  };
+
+  const formatActivityDescription = (activity) => {
+    const action = activity.action?.toUpperCase();
+    const endpoint = activity.endpoint?.replace(/^\//, '');
+    
+    // Busca o nome do usuário
+    const user = usersData?.users?.find(u => u.id === activity.userId);
+    const userName = user?.name || 'Usuário';
+    
+    // Se tiver description e for um JSON válido, tenta parsear
+    if (activity.description) {
+      try {
+        const desc = JSON.parse(activity.description);
+        // Ignora a descrição JSON e cria uma descrição limpa
+      } catch (e) {
+        // Se não for JSON, usa a description como está
+        return activity.description;
+      }
+    }
+    
+    const actionMap = {
+      'POST': 'criou',
+      'GET': 'visualizou',
+      'DELETE': 'deletou',
+      'PATCH': 'atualizou',
+      'PUT': 'atualizou'
+    };
+    
+    const endpointMap = {
+      'events': 'eventos',
+      'posts': 'posts',
+      'users': 'usuários',
+      'sermons': 'sermões',
+      'lessons': 'lições',
+      'comments': 'comentários',
+      'likes': 'curtidas',
+      'locations': 'locais',
+      'user-activity': 'atividades'
+    };
+    
+    const translatedEndpoint = endpointMap[endpoint] || endpoint;
+    const actionVerb = actionMap[action] || action;
+    
+    return `${userName} ${actionVerb} ${translatedEndpoint}`;
   };
 
   return (
@@ -152,8 +242,8 @@ export default function AdminDashboard() {
                 <div className="flex justify-center py-8">
                   <Loader size={20} />
                 </div>
-              ) : activities?.userActivities && activities.userActivities.length > 0 ? (
-                activities.userActivities.map((activity) => (
+              ) : activities?.activities && activities.activities.length > 0 ? (
+                activities.activities.map((activity) => (
                   <div
                     key={activity.id}
                     className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors"
@@ -162,8 +252,8 @@ export default function AdminDashboard() {
                       {getActivityIcon(activity.action)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-white/90 line-clamp-2">
-                        {activity.description || `${activity.action} em ${activity.endpoint}`}
+                      <p className="text-sm text-white/90">
+                        {formatActivityDescription(activity)}
                       </p>
                       <p className="text-xs text-white/40 mt-1">
                         {formatActivityTime(activity.createdAt)}

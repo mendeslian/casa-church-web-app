@@ -8,31 +8,36 @@ export async function getAdminStats() {
 }
 
 export async function getRecentActivities({ page = 1, limit = 5 } = {}) {
-    const params = new URLSearchParams({
-        page: page.toString(),
-        limit: limit.toString(),
-        orderBy: "createdAt",
-        orderDirection: "DESC",
-    });
+    const { data } = await axios.get(`${BASE_URL}/user-activity`);
 
-    const { data } = await axios.get(`${BASE_URL}/user-activities?${params.toString()}`);
-    return data;
+    // Pega apenas os mais recentes
+    const recentActivities = data.activities?.slice(0, limit) || [];
+
+    return {
+        ...data,
+        activities: recentActivities
+    };
 }
 
 export async function getUpcomingEvents({ page = 1, limit = 5 } = {}) {
     const params = new URLSearchParams({
         page: page.toString(),
-        limit: limit.toString(),
+        limit: "100", // Busca muitos eventos para filtrar
         orderBy: "startDate",
         orderDirection: "ASC",
     });
 
     const { data } = await axios.get(`${BASE_URL}/events?${params.toString()}`);
 
-    // Filtra apenas eventos futuros
-    const upcomingEvents = data.events?.filter(event =>
-        new Date(event.startDate) >= new Date()
-    ) || [];
+    // Filtra apenas eventos futuros (que ainda não começaram)
+    const today = new Date();
+
+    const upcomingEvents = data.events?.filter(event => {
+        const eventStartDate = new Date(event.startDate);
+        return eventStartDate >= today;
+    }) || [];
+
+    console.log("🔜 EVENTOS FUTUROS FILTRADOS:", upcomingEvents);
 
     return {
         ...data,
