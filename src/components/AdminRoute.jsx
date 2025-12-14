@@ -13,6 +13,7 @@ export default function AdminRoute() {
   let isAdmin = false;
   let hasError = false;
 
+  
   try {
     user = JSON.parse(userStr);
     
