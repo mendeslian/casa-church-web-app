@@ -38,7 +38,6 @@ export default function AdminDashboard() {
       const activeEvents = response.events?.filter(event => {
         const eventEndDate = new Date(event.endDate);
         const isActive = eventEndDate >= today;
-        console.log(`Evento: ${event.title} | End: ${event.endDate} | Ativo: ${isActive}`);
         return isActive;
       }) || [];
       
@@ -90,7 +89,6 @@ const { data: activities, isLoading: loadingActivities } = useQuery({
     queryKey: ["admin-upcoming-events"],
     queryFn: async () => {
       const result = await getUpcomingEvents({ limit: 5 });
-      console.log("🔜 PRÓXIMOS EVENTOS:", result);
       return result;
     },
   });
@@ -162,17 +160,7 @@ const { data: activities, isLoading: loadingActivities } = useQuery({
     const user = usersData?.users?.find(u => u.id === activity.userId);
     const userName = user?.name || 'Usuário';
     
-    // Se tiver description e for um JSON válido, tenta parsear
-    if (activity.description) {
-      try {
-        const desc = JSON.parse(activity.description);
-        // Ignora a descrição JSON e cria uma descrição limpa
-      } catch (e) {
-        // Se não for JSON, usa a description como está
-        return activity.description;
-      }
-    }
-    
+  
     const actionMap = {
       'POST': 'criou',
       'GET': 'visualizou',
