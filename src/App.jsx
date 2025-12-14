@@ -10,6 +10,8 @@ import Register from "./containers/Register.jsx";
 import Contacts from "./containers/Contacts.jsx";
 import Social from "./containers/Social.jsx"
 import AdminDashboard from "./containers/admin/AdminDashboard";
+import AdminEvents from "./containers/admin/AdminEvents";
+import AdminSermons from "./containers/admin/AdminSermons";
 
 
 // components
@@ -56,6 +58,8 @@ export default function App() {
 
         <Route element={<AdminRoute />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/eventos" element={<AdminEvents />} />
+          <Route path="/admin/sermoes" element={<AdminSermons />} />
         </Route>
 
         <Route element={<PublicRoute />}>
