@@ -9,11 +9,14 @@ import Login from "./containers/Login.jsx";
 import Register from "./containers/Register.jsx";
 import Contacts from "./containers/Contacts.jsx";
 import Social from "./containers/Social.jsx"
+import AdminDashboard from "./containers/admin/AdminDashboard";
+
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
 import ToastProvider from "./components/ToastProvider.jsx";
+import AdminRoute from "./components/AdminRoute";
 
 export default function App() {
   try {
@@ -49,6 +52,10 @@ export default function App() {
           <Route path="/evento/:id" element={<Event />} />
           <Route path="/contatos" element={<Contacts />} />
           <Route path="/social" element={<Social />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
         </Route>
 
         <Route element={<PublicRoute />}>
