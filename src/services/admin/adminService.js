@@ -1,0 +1,46 @@
+import axios from "axios";
+
+const BASE_URL = "http://localhost:3000";
+
+export async function getAdminStats() {
+    const { data } = await axios.get(`${BASE_URL}/users/stats`);
+    return data;
+}
+
+export async function getRecentActivities({ page = 1, limit = 5 } = {}) {
+    const { data } = await axios.get(`${BASE_URL}/user-activity`);
+
+    // Pega apenas os mais recentes
+    const recentActivities = data.activities?.slice(0, limit) || [];
+
+    return {
+        ...data,
+        activities: recentActivities
+    };
+}
+
+export async function getUpcomingEvents({ page = 1, limit = 5 } = {}) {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "100", // Busca muitos eventos para filtrar
+        orderBy: "startDate",
+        orderDirection: "ASC",
+    });
+
+    const { data } = await axios.get(`${BASE_URL}/events?${params.toString()}`);
+
+    // Filtra apenas eventos futuros (que ainda não começaram)
+    const today = new Date();
+
+    const upcomingEvents = data.events?.filter(event => {
+        const eventStartDate = new Date(event.startDate);
+        return eventStartDate >= today;
+    }) || [];
+
+    console.log("🔜 EVENTOS FUTUROS FILTRADOS:", upcomingEvents);
+
+    return {
+        ...data,
+        events: upcomingEvents.slice(0, limit)
+    };
+}

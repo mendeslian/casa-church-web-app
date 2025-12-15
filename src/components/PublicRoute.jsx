@@ -1,8 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Header from "./Header.jsx";
-import Footer from "./Footer.jsx";
 
-export default function ProtectedRoute() {
+export default function PublicRoute() {
   let isAuthenticated = false;
   try {
     const raw = localStorage.getItem("user");
@@ -14,13 +12,6 @@ export default function ProtectedRoute() {
     isAuthenticated = false;
   }
 
-  if (!isAuthenticated) return <Navigate to="/login" replace />;
-
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
-  );
+  if (isAuthenticated) return <Navigate to="/" replace />;
+  return <Outlet />;
 }
