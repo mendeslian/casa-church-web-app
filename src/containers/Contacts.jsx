@@ -11,7 +11,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-import { createContact } from "../services/contact/contactService";
+import { createContact } from "../services/contacts/contactsService";
 import { toastSuccess, toastError } from "../utils/toastHelper";
 
 // components
