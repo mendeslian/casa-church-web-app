@@ -37,8 +37,6 @@ export async function getUpcomingEvents({ page = 1, limit = 5 } = {}) {
         return eventStartDate >= today;
     }) || [];
 
-    console.log("🔜 EVENTOS FUTUROS FILTRADOS:", upcomingEvents);
-
     return {
         ...data,
         events: upcomingEvents.slice(0, limit)
