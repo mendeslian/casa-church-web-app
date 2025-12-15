@@ -19,7 +19,7 @@ export async function createEvent(body) {
 }
 
 export async function updateEvent(id, body) {
-  const { data } = await axios.get(`http://localhost:3000/events/${id}`, body);
+  const { data } = await axios.patch(`http://localhost:3000/events/${id}`, body);
 
   return data;
 }

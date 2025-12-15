@@ -8,7 +8,10 @@ import Event from "./containers/Event.jsx";
 import Login from "./containers/Login.jsx";
 import Register from "./containers/Register.jsx";
 import Contacts from "./containers/Contacts.jsx";
-import Social from "./containers/Social.jsx";
+import Social from "./containers/Social.jsx"
+import AdminDashboard from "./containers/admin/AdminDashboard";
+import AdminEvents from "./containers/admin/AdminEvents";
+import AdminSermons from "./containers/admin/AdminSermons";
 import Sermons from "./containers/Sermons.jsx";
 import Lessons from "./containers/Lessons.jsx";
 import Lesson from "./containers/Lesson.jsx";
@@ -17,6 +20,7 @@ import Lesson from "./containers/Lesson.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import PublicRoute from "./components/PublicRoute.jsx";
 import ToastProvider from "./components/ToastProvider.jsx";
+import AdminRoute from "./components/AdminRoute";
 
 export default function App() {
   try {
@@ -55,6 +59,12 @@ export default function App() {
           <Route path="/sermoes" element={<Sermons />} />
           <Route path="/sermons/:sermonId" element={<Lessons />} />
           <Route path="/sermons/:sermonId/aulas/:lessonId" element={<Lesson />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/eventos" element={<AdminEvents />} />
+          <Route path="/admin/sermoes" element={<AdminSermons />} />
         </Route>
 
         <Route element={<PublicRoute />}>
