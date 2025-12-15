@@ -17,6 +17,7 @@ import Lessons from "./containers/Lessons.jsx";
 import Lesson from "./containers/Lesson.jsx";
 import About from "./containers/About.jsx";
 import Profile from "./containers/Profile.jsx"
+import UnderConstruction from "./containers/UnderConstruction";
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -69,6 +70,10 @@ export default function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/eventos" element={<AdminEvents />} />
           <Route path="/admin/sermoes" element={<AdminSermons />} />
+          <Route path="/admin/*" element={ <UnderConstruction
+            title="Área administrativa"
+            description="Esta funcionalidade administrativa ainda está em desenvolvimento."/>} 
+          />
         </Route>
 
         <Route element={<PublicRoute />}>
