@@ -55,7 +55,14 @@ export default function AdminLayout({ children }) {
         {/* Logo */}
         <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
           {isSidebarOpen && (
-            <img src={LogoName} alt="Logo" width={100} className="select-none" />
+            <Link to="/" className="flex items-center">
+              <img 
+                src={LogoName} 
+                alt="Logo Casa Church" 
+                width={100} 
+                className="select-none hover:opacity-80 transition-opacity" 
+              />
+            </Link>
           )}
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -111,7 +118,14 @@ export default function AdminLayout({ children }) {
           >
             <Menu size={20} />
           </button>
-          <img src={LogoName} alt="Logo" width={100} className="select-none" />
+          <Link to="/">
+            <img 
+              src={LogoName} 
+              alt="Logo Casa Church" 
+              width={100} 
+              className="select-none hover:opacity-80 transition-opacity" 
+            />
+          </Link>
         </div>
 
         {/* Content */}
