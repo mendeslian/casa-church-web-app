@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+import { API_URL } from "@/config/env";
 
 
 export async function createLessonProgress({ userId, lessonId }) {
-    const { data } = await axios.post(`${BASE_URL}/lesson-progress`, {
+    const { data } = await axios.post(`${API_URL}/lesson-progress`, {
         userId,
         lessonId,
     });
@@ -14,7 +14,7 @@ export async function createLessonProgress({ userId, lessonId }) {
 
 
 export async function getLessonProgressByLessonId(lessonId) {
-    const { data } = await axios.get(`${BASE_URL}/lesson-progress`, {
+    const { data } = await axios.get(`${API_URL}/lesson-progress`, {
         params: {
             lessonId,
         },
@@ -24,7 +24,7 @@ export async function getLessonProgressByLessonId(lessonId) {
 }
 
 export async function getLessonProgress(params = {}) {
-    const { data } = await axios.get(`${BASE_URL}/lesson-progress`, {
+    const { data } = await axios.get(`${API_URL}/lesson-progress`, {
         params,
     });
 

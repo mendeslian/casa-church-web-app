@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+import { API_URL } from "@/config/env";
 
 export async function createPost(body) {
-    const { data } = await axios.post(`${BASE_URL}/posts`, body);
+    const { data } = await axios.post(`${API_URL}/posts`, body);
     return data;
 }
 
@@ -19,16 +19,16 @@ export async function findAllPosts({ page = 1, limit = 10, orderBy = "createdAt"
         params.append("userId", userId);
     }
 
-    const { data } = await axios.get(`${BASE_URL}/posts?${params.toString()}`);
+    const { data } = await axios.get(`${API_URL}/posts?${params.toString()}`);
     return data;
 }
 
 export async function findPostById(id) {
-    const { data } = await axios.get(`${BASE_URL}/posts/${id}`);
+    const { data } = await axios.get(`${API_URL}/posts/${id}`);
     return data;
 }
 
 export async function deletePost(id) {
-    const { data } = await axios.delete(`${BASE_URL}/posts/${id}`);
+    const { data } = await axios.delete(`${API_URL}/posts/${id}`);
     return data;
 }

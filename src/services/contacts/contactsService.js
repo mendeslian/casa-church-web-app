@@ -1,11 +1,8 @@
 import axios from "axios";
 
-/**
- * Envia uma mensagem de contato para o backend
- * @param {{ name: string, email: string, subject: string, message: string }} body
- * @returns response.data
- */
+import { API_URL } from "@/config/env";
+
 export async function createContact(body) {
-  const { data } = await axios.post(`http://localhost:3000/contact-messages`, body);
+  const { data } = await axios.post(`${API_URL}/contact-messages`, body);
   return data;
 }

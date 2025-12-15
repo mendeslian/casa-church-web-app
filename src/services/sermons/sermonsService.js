@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+import { API_URL } from "@/config/env";
 
 export async function createSermon(body) {
-    const { data } = await axios.post(`${BASE_URL}/sermons`, body);
+    const { data } = await axios.post(`${API_URL}/sermons`, body);
     return data;
 }
 
@@ -15,21 +15,21 @@ export async function findAllSermons({ page = 1, limit = 10, orderBy = "createdA
         orderDirection,
     });
 
-    const { data } = await axios.get(`${BASE_URL}/sermons?${params.toString()}`);
+    const { data } = await axios.get(`${API_URL}/sermons?${params.toString()}`);
     return data;
 }
 
 export async function findSermonById(id) {
-    const { data } = await axios.get(`${BASE_URL}/sermons/${id}`);
+    const { data } = await axios.get(`${API_URL}/sermons/${id}`);
     return data;
 }
 
 export async function updateSermon(id, body) {
-    const { data } = await axios.patch(`${BASE_URL}/sermons/${id}`, body);
+    const { data } = await axios.patch(`${API_URL}/sermons/${id}`, body);
     return data;
 }
 
 export async function deleteSermon(id) {
-    const { data } = await axios.delete(`${BASE_URL}/sermons/${id}`);
+    const { data } = await axios.delete(`${API_URL}/sermons/${id}`);
     return data;
 }
