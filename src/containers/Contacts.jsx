@@ -11,6 +11,9 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
+import { createContact } from "../services/contact/contactService";
+import { toastSuccess, toastError } from "../utils/toastHelper";
+
 // components
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -54,13 +57,33 @@ export default function Contacts() {
 
     setIsSubmitting(true);
 
-    // Simulação de envio - substitua pela sua chamada axios real
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+
+      const res = await createContact(formData);
+
       setShowSuccess(true);
       setFormData({ name: "", email: "", subject: "", message: "" });
+
+      toastSuccess(res?.message || "Mensagem enviada com sucesso");
+
+      // Caso queira manter a mensagem de sucesso por X segundos
       setTimeout(() => setShowSuccess(false), 5000);
-    }, 2000);
+      return res;
+    } catch (error) {
+      const apiMessage =
+        error?.response?.data?.message ||
+        (typeof error?.response?.data === "string"
+          ? error.response.data
+          : null) ||
+        error?.message ||
+        "Erro ao enviar a mensagem. Tente novamente.";
+
+      toastError(apiMessage);
+      console.error(error);
+      return null;
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,86 +100,84 @@ export default function Contacts() {
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Informações de Contato */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
-              <h2 className="text-xl font-semibold mb-6">Informações</h2>
+<div className="lg:col-span-1 h-full">
+  <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
+    <h2 className="text-xl font-semibold mb-6">Informações</h2>
 
-              <div className="space-y-5">
-                <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
-                    <Mail size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Email</h3>
-                    <p className="text-white/60 text-sm">contato@empresa.com</p>
-                  </div>
-                </div>
+    <div className="space-y-5">
+      {/* Email */}
+      <div className="flex items-start gap-4">
+        <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
+          <Mail size={20} className="text-white" />
+        </div>
+        <div>
+          <h3 className="font-medium mb-1">Email</h3>
+          <p className="text-white/60 text-sm">contato@empresa.com</p>
+        </div>
+      </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
-                    <Phone size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Telefone</h3>
-                    <p className="text-white/60 text-sm">+55 (21) 99999-9999</p>
-                  </div>
-                </div>
+      {/* Telefone */}
+      <div className="flex items-start gap-4">
+        <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
+          <Phone size={20} className="text-white" />
+        </div>
+        <div>
+          <h3 className="font-medium mb-1">Telefone</h3>
+          <p className="text-white/60 text-sm">+55 (21) 99999-9999</p>
+        </div>
+      </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
-                    <MapPin size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Endereço</h3>
-                    <p className="text-white/60 text-sm">
-                      Rio de Janeiro, RJ
-                      <br />
-                      Brasil
-                    </p>
-                  </div>
-                </div>
+      {/* Endereço */}
+      <div className="flex items-start gap-4">
+        <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
+          <MapPin size={20} className="text-white" />
+        </div>
+        <div>
+          <h3 className="font-medium mb-1">Endereço</h3>
+          <p className="text-white/60 text-sm">
+            Taquara - Duque de Caxias, RJ
+            <br />
+            Brasil
+          </p>
+        </div>
+      </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-white/10 p-2.5 mt-0.5">
-                    <Clock size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium mb-1">Horário</h3>
-                    <p className="text-white/60 text-sm">
-                      Seg - Sab: 9h às 18h
-                      <br />
-                      Dom: 7h às 22h
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Mapa (agora isolado como um "filho" próprio) */}
+      <div className="rounded-xl overflow-hidden border border-white/10">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d29463.606992865807!2d-43.2461818!3d-22.6183096!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x990b83903f4529%3A0x913b11ec1f7eee0b!2sTaquara%2C%20Duque%20de%20Caxias%20-%20RJ!5e0!3m2!1spt-BR!2sbr!4v1765671518718!5m2!1spt-BR!2sbr"
+          width="100%"
+          height="200"
+          style={{ border: 0 }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+    </div>
+  </div>
 
-            {/* FAQ Rápido */}
-            <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
-              <h2 className="text-xl font-semibold mb-4">
-                Perguntas Frequentes
-              </h2>
-              <div>
-                <p className="font-medium mb-1">Suporte técnico?</p>
-                <p className="text-white/60">Disponível de segunda a sexta.</p>
-              </div>
-              <div className="space-y-3 text-sm">
-                <div>
-                  <p className="font-medium mb-1">Tempo de resposta?</p>
-                  <p className="text-white/60">
-                    Respondemos em até 24 horas úteis.
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium mb-1">Suporte técnico?</p>
-                  <p className="text-white/60">
-                    Disponível de segunda a sexta.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+ {/* FAQ Rápido */}
+  <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
+    <h2 className="text-xl font-semibold mb-4">Perguntas Frequentes</h2>
+    <div>
+      <p className="font-medium mb-1">Suporte técnico?</p>
+      <p className="text-white/60">Disponível de segunda a sexta.</p>
+    </div>
+    <div className="space-y-3 text-sm mt-4">
+      <div>
+        <p className="font-medium mb-1">Tempo de resposta?</p>
+        <p className="text-white/60">
+          Respondemos em até 24 horas úteis.
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
 
           {/* Formulário */}
           <div className="lg:col-span-2">
@@ -273,4 +294,4 @@ export default function Contacts() {
       </div>
     </div>
   );
-}
+} 

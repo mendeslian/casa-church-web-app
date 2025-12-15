@@ -12,7 +12,9 @@ import Social from "./containers/Social.jsx"
 import AdminDashboard from "./containers/admin/AdminDashboard";
 import AdminEvents from "./containers/admin/AdminEvents";
 import AdminSermons from "./containers/admin/AdminSermons";
-
+import Sermons from "./containers/Sermons.jsx";
+import Lessons from "./containers/Lessons.jsx";
+import Lesson from "./containers/Lesson.jsx";
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -54,6 +56,9 @@ export default function App() {
           <Route path="/evento/:id" element={<Event />} />
           <Route path="/contatos" element={<Contacts />} />
           <Route path="/social" element={<Social />} />
+          <Route path="/sermoes" element={<Sermons />} />
+          <Route path="/sermons/:sermonId" element={<Lessons />} />
+          <Route path="/sermons/:sermonId/aulas/:lessonId" element={<Lesson />} />
         </Route>
 
         <Route element={<AdminRoute />}>
