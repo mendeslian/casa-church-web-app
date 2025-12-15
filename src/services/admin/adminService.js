@@ -7,6 +7,7 @@ export async function getAdminStats() {
     return data;
 }
 
+// eslint-disable-next-line no-unused-vars
 export async function getRecentActivities({ page = 1, limit = 5 } = {}) {
     const { data } = await axios.get(`${BASE_URL}/user-activity`);
 
