@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+import { API_URL } from "@/config/env";
 
 export async function createLesson(body) {
-    const { data } = await axios.post(`${BASE_URL}/lessons`, body);
+    const { data } = await axios.post(`${API_URL}/lessons`, body);
     return data;
 }
 
@@ -19,21 +19,21 @@ export async function findAllLessons({ page = 1, limit = 10, sermonId, orderBy =
         params.append("sermonId", sermonId);
     }
 
-    const { data } = await axios.get(`${BASE_URL}/lessons?${params.toString()}`);
+    const { data } = await axios.get(`${API_URL}/lessons?${params.toString()}`);
     return data;
 }
 
 export async function findLessonById(id) {
-    const { data } = await axios.get(`${BASE_URL}/lessons/${id}`);
+    const { data } = await axios.get(`${API_URL}/lessons/${id}`);
     return data;
 }
 
 export async function updateLesson(id, body) {
-    const { data } = await axios.patch(`${BASE_URL}/lessons/${id}`, body);
+    const { data } = await axios.patch(`${API_URL}/lessons/${id}`, body);
     return data;
 }
 
 export async function deleteLesson(id) {
-    const { data } = await axios.delete(`${BASE_URL}/lessons/${id}`);
+    const { data } = await axios.delete(`${API_URL}/lessons/${id}`);
     return data;
 }

@@ -1,14 +1,15 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000";
+import { API_URL } from "@/config/env";
 
 export async function getAdminStats() {
-    const { data } = await axios.get(`${BASE_URL}/users/stats`);
+    const { data } = await axios.get(`${API_URL}/users/stats`);
     return data;
 }
 
+// eslint-disable-next-line no-unused-vars
 export async function getRecentActivities({ page = 1, limit = 5 } = {}) {
-    const { data } = await axios.get(`${BASE_URL}/user-activity`);
+    const { data } = await axios.get(`${API_URL}/user-activity`);
 
     // Pega apenas os mais recentes
     const recentActivities = data.activities?.slice(0, limit) || [];
@@ -27,7 +28,7 @@ export async function getUpcomingEvents({ page = 1, limit = 5 } = {}) {
         orderDirection: "ASC",
     });
 
-    const { data } = await axios.get(`${BASE_URL}/events?${params.toString()}`);
+    const { data } = await axios.get(`${API_URL}/events?${params.toString()}`);
 
     // Filtra apenas eventos futuros (que ainda não começaram)
     const today = new Date();
@@ -36,8 +37,6 @@ export async function getUpcomingEvents({ page = 1, limit = 5 } = {}) {
         const eventStartDate = new Date(event.startDate);
         return eventStartDate >= today;
     }) || [];
-
-    console.log("🔜 EVENTOS FUTUROS FILTRADOS:", upcomingEvents);
 
     return {
         ...data,
