@@ -8,7 +8,10 @@ import Event from "./containers/Event.jsx";
 import Login from "./containers/Login.jsx";
 import Register from "./containers/Register.jsx";
 import Contacts from "./containers/Contacts.jsx";
-import Social from "./containers/Social.jsx"
+import Social from "./containers/Social.jsx";
+import Sermons from "./containers/Sermons.jsx";
+import Lessons from "./containers/Lessons.jsx";
+import Lesson from "./containers/Lesson.jsx";
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -49,6 +52,9 @@ export default function App() {
           <Route path="/evento/:id" element={<Event />} />
           <Route path="/contatos" element={<Contacts />} />
           <Route path="/social" element={<Social />} />
+          <Route path="/sermoes" element={<Sermons />} />
+          <Route path="/sermons/:sermonId" element={<Lessons />} />
+          <Route path="/sermons/:sermonId/aulas/:lessonId" element={<Lesson />} />
         </Route>
 
         <Route element={<PublicRoute />}>
