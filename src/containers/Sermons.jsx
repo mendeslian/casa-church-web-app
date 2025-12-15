@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSermons } from "../services/sermons/sermonService";
+import { findAllSermons } from "../services/sermons/sermonsService";
 
 import Loader from "../components/Loader";
 import { toastError } from "../utils/toastHelper";
@@ -14,8 +14,9 @@ export default function Sermons() {
   useEffect(() => {
     async function fetchSermons() {
       try {
-        const list = await getSermons();
-        setSermons(list);
+ const response = await findAllSermons();
+setSermons(response.sermons || []);
+
       } catch (error) {
         toastError("Erro ao carregar sermões");
         console.error(error);

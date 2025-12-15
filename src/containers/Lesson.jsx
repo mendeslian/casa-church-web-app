@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { getLessonById } from "../services/lesson/lessonService";
+import { findLessonById } from "../services/lessons/lessonsService";
 import {
   createLessonProgress,
   getLessonProgress,
-} from "../services/lesson/lessonProgressService";
+} from "../services/lessons/lessonsProgressService";
 
 import Loader from "../components/Loader";
 import { toastError, toastSuccess } from "../utils/toastHelper";
@@ -25,7 +25,7 @@ export default function Lesson() {
     async function fetchData() {
       try {
         const [lessonData, progressData] = await Promise.all([
-          getLessonById(lessonId),
+          findLessonById(lessonId),
           getLessonProgress({ lessonId }),
         ]);
 

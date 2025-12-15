@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getLessons } from "../services/lesson/lessonService";
+import { findAllLessons } from "../services/lessons/lessonsService";
 
-import { getSermonById } from "../services/sermons/sermonService";
+import { findSermonById } from "../services/sermons/sermonsService";
 
 import Loader from "../components/Loader";
 
@@ -27,9 +27,9 @@ export default function Lessons() {
     async function fetchData() {
       try {
         const [sermonData, lessonsData] = await Promise.all([
-          getSermonById(sermonId),
+          findSermonById(sermonId),
 
-          getLessons({
+          findAllLessons({
             sermonId,
 
             orderDirection: "ASC",
