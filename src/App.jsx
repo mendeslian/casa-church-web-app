@@ -15,6 +15,8 @@ import AdminSermons from "./containers/admin/AdminSermons";
 import Sermons from "./containers/Sermons.jsx";
 import Lessons from "./containers/Lessons.jsx";
 import Lesson from "./containers/Lesson.jsx";
+import About from "./containers/About.jsx";
+import Profile from "./containers/Profile.jsx"
 
 // components
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
@@ -59,6 +61,8 @@ export default function App() {
           <Route path="/sermoes" element={<Sermons />} />
           <Route path="/sermons/:sermonId" element={<Lessons />} />
           <Route path="/sermons/:sermonId/aulas/:lessonId" element={<Lesson />} />
+          <Route path="/sobre" element={<About />} />
+          <Route path="/perfil" element={<Profile />} />
         </Route>
 
         <Route element={<AdminRoute />}>
